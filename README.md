@@ -10,7 +10,8 @@ c-cpp-projects
 ├── c
 │
 ├── cpp
-│   └── calc_app
+│   ├── calc_app
+│   └── small_projects
 │
 └── README.md
 ```
