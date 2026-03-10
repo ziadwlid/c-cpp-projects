@@ -1,0 +1,6 @@
+build/
+*.o
+*.out
+*.log
+.idea/
+cmake-build-debug/
