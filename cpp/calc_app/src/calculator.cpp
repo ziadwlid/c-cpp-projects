@@ -1,6 +1,7 @@
 #include "calculator.h"
 #include "../include/calculator.h"
-
+#include <fstream>
+#include <filesystem>
 #include <cmath>
 #include <iomanip>
 #include <iostream>
@@ -8,14 +9,13 @@
 
 
 void Calculator::intro() {
-    std::cout << R"(  _    _      _ _                       _                            _                    _            _       _
- | |  | |    | | |                     | |                          | |                  | |          | |     | |
- | |__| | ___| | | ___    __      _____| | ___ ___  _ __ ___   ___  | |_ ___     ___ __ _| | ___ _   _| | __ _| |_ ___  _ __    __ _ _ __  _ __
- |  __  |/ _ \ | |/ _ \   \ \ /\ / / _ \ |/ __/ _ \| '_ ` _ \ / _ \ | __/ _ \   / __/ _` | |/ __| | | | |/ _` | __/ _ \| '__|  / _` | '_ \| '_ \
- | |  | |  __/ | | (_) |   \ V  V /  __/ | (_| (_) | | | | | |  __/ | || (_) | | (_| (_| | | (__| |_| | | (_| | || (_) | |    | (_| | |_) | |_) |
- |_|  |_|\___|_|_|\___( )   \_/\_/ \___|_|\___\___/|_| |_| |_|\___|  \__\___/   \___\__,_|_|\___|\__,_|_|\__,_|\__\___/|_|     \__,_| .__/| .__/
-                      |/                                                                                                            | |   | |
-                                                                                                                                    |_|   |_|    )"<< "\n" << "You can make many calculations here\n";
+    std::ifstream file("assets/ascii_intro.txt");
+    if (!file.is_open()) {
+        std::cerr << "Error: ascii_intro.txt not found\n";
+        return;
+    }
+    std::cout << file.rdbuf();
+    std::cout << "\nYou can make many calculations here\n";
 }
 int Calculator::choose() {
     int input = 0;
@@ -26,15 +26,11 @@ int Calculator::choose() {
         std::cin >> input;
         if (input>=1 && input<=5) {
             if (input == 5) {
-                std::cout << R"( ______            _______
-(  ___ \ |\     /|(  ____ \
-| (   ) )( \   / )| (    \/
-| (__/ /  \ (_) / | (__
-|  __ (    \   /  |  __)
-| (  \ \    ) (   | (
-| )___) )   | |   | (____/\
-|/ \___/    \_/   (_______/
-                           )" << "\n";
+                std::ifstream file("assets/ascii_close.txt");
+                if (!file.is_open()) {
+                    std::cerr << "Error: ascii_intro.txt not found\n";
+                }
+                std::cout << file.rdbuf();
             }
             return input;
         }
