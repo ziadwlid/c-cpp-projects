@@ -18,16 +18,19 @@ This project demonstrates:
 
 ```
 calc_app/
-├── CMakeLists.txt     # CMake build configuration
-├── build.sh           # Script to build project
-├── run.sh             # Script to run executable
-├── include/           # Header files
+├── CMakeLists.txt        # CMake build configuration
+├── build.sh              # Script to build the project
+├── run.sh                # Script to run the executable
+├── include/              # Header files
 │   └── calculator.h
-└── src/               # Implementation files
-    ├── calculator.cpp
-    └── main.cpp
-.gitignore
-README.md
+├── src/                  # Implementation files
+│   ├── calculator.cpp
+│   └── main.cpp
+├── assets/               # ASCII art and other resources
+│   ├── ascii_intro.txt
+│   └── ascii_close.txt
+├── .gitignore
+└── README.md
 ```
 
 ---
