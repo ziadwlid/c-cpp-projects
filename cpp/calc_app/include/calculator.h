@@ -1,6 +1,6 @@
 #ifndef CALCULATOR_H
 #define CALCULATOR_H
-
+#include <string>
 class Calculator {
     private:
         int number = 0;
@@ -33,6 +33,6 @@ class Calculator {
         double volume_sqr_prism(double a);
         double volume_sphere(double a);
         double volume_elipsoid(double a, double b, double c);
-
+        bool check_input(double &x, const std::string &prompt);
 };
 #endif

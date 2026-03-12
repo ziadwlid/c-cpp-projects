@@ -1,5 +1,6 @@
 #include "calculator.h"
 #include "../include/calculator.h"
+#include "../include/draw_shapes.h"
 #include <fstream>
 #include <filesystem>
 #include <cmath>
@@ -85,10 +86,15 @@ void Calculator::mathmatic() {
             std::cout << "\nWrong input. Please try again.\n";
         }
         else if (in == 1) {
+            std::cout << "\nadd-> '+'\nsub-> '-'\nmult-> '*'\ndiv-> '/'\npower-> '^'\nroot-> 'V'\n\n";
+            std::cout << "Enter expression (or 'q' to quit): ";
             std::cout << "Enter expression\n";
             std::string expr;
             std::getline(std::cin >> std::ws, expr);
-
+            if (expr == "q" || expr == "Q") {
+                std::cout << "Exiting calculator...\n";
+                break;
+            }
             if (sscanf(expr.c_str(), "%lf %c %lf", &a, &op, &b) != 3) {
                 std::cout << "Invalid expression. Use format: \n";
                 continue;
@@ -132,6 +138,31 @@ void Calculator::mathmatic() {
 
     }
 }
+bool Calculator::check_input(double &x, const std::string &prompt) {
+    std::string line;
+    while (true) {
+        std::cout << prompt;
+        std::getline(std::cin >> std::ws, line);
+        if (line == "q" || line == "Q") {
+            x = -1;
+            return false;   // <--- return false on quit
+        }
+        std::stringstream ss(line);
+        if (!(ss >> x)) {
+            std::cout << "Invalid input. Please enter a number.\n";
+            continue;
+        }
+        if (x <= 0 || x > 1000) {
+            std::cout << "Invalid input. Enter a number between 1 and 1000.\n";
+            continue;
+        }
+        if (!(ss >> std::ws).eof()) {
+            std::cout << "Invalid input. Extra characters after number.\n";
+            continue;
+        }
+        return true;
+    }
+}
 
 double Calculator::area_rec(double a, double b) {
     return (a * b);
@@ -169,35 +200,33 @@ void Calculator::area() {
         else {
             switch (in) {
                 case 1:
-                    std::cout << "Enter rectangle width: ";
-                    std::cin >> a;
-                    std::cout << "Enter rectangle height: ";
-                    std::cin >> b;
+                    if (!check_input(a, "Enter rectangle width: ")) break;
+                    if (!check_input(b, "Enter rectangle length: ")) break;
                     std::cout << "------------\n";
-                    std::cout << "Area of rectangle: " << area_rec(a, b) << "\n";
-                    std::cout << "------------\n";
+                    std::cout << "Area of rectangle: " << std::fixed << std::setprecision(10)<< area_rec(a, b) << "\n";
+                    std::cout << "Drawing rectangle: \n\n";
+                    draw_shapes::rectangle(static_cast<int> (a), static_cast<int>(b));
+                    std::cout << "\n------------\n";
                     break;
                 case 2:
-                    std::cout << "Enter square length: ";
-                    std::cin >> a;
+                    if (!check_input(a, "Enter square length: ")) break;
                     std::cout << "------------\n";
-                    std::cout << "Area of square: " << area_sqr(a) << "\n";
-                    std::cout << "------------\n";
+                    std::cout << "Area of square: " << std::fixed << std::setprecision(10)<< area_sqr(a) << "\n";
+                    std::cout << "Drawing square: \n\n";
+                    draw_shapes::square(static_cast<int> (a));
+                    std::cout << "\n------------\n";
                     break;
                 case 3:
-                    std::cout << "Enter circle redius: ";
-                    std::cin >> a;
+                    if (!check_input(a, "Enter cicle radius: ")) break;
                     std::cout << "------------\n";
-                    std::cout << "Area of circle: " << area_circ(a) << "\n";
+                    std::cout << "Area of circle: " << std::fixed << std::setprecision(10) << area_circ(a) << "\n";
                     std::cout << "------------\n";
                     break;
                 case 4:
-                    std::cout << "Enter ellipse redius 1: ";
-                    std::cin >> a;
-                    std::cout << "Enter ellipse redius 2: ";
-                    std::cin >> b;
+                    if (!check_input(a, "Enter ellipse radius 1: ")) break;
+                    if (!check_input(b, "Enter ellipse radius 2: ")) break;
                     std::cout << "------------\n";
-                    std::cout << "Area of ellipse: " << area_eclp(a, b) << "\n";
+                    std::cout << "Area of ellipse: " << std::fixed << std::setprecision(10) << area_eclp(a, b) << "\n";
                     std::cout << "------------\n";
                     break;
                 default:
@@ -240,35 +269,29 @@ void Calculator::perimeter() {
         else {
             switch (in) {
                 case 1:
-                    std::cout << "Enter rectangle width: ";
-                    std::cin >> a;
-                    std::cout << "Enter rectangle height: ";
-                    std::cin >> b;
+                    if (!check_input(a, "Enter rectangle width: ")) break;
+                    if (!check_input(b, "Enter rectangle height: ")) break;
                     std::cout << "------------\n";
-                    std::cout << "Perimeter of rectangle: " << perimeter_rec(a, b) << "\n";
+                    std::cout << "Perimeter of rectangle: " << std::fixed << std::setprecision(10) << perimeter_rec(a, b) << "\n";
                     std::cout << "------------\n";
                     break;
                 case 2:
-                    std::cout << "Enter square length: ";
-                    std::cin >> a;
+                    if (!check_input(a, "Enter square length: ")) break;
                     std::cout << "------------\n";
-                    std::cout << "Perimeter of rectangle: " << perimeter_sqr(a) << "\n";
+                    std::cout << "Perimeter of square: " << std::fixed << std::setprecision(10) << perimeter_sqr(a) << "\n";
                     std::cout << "------------\n";
                     break;
                 case 3:
-                    std::cout << "Enter circle radius: ";
-                    std::cin >> a;
+                    if (!check_input(a, "Enter circle radius: ")) break;
                     std::cout << "------------\n";
-                    std::cout << "Perimeter of circle: " << perimeter_circ(a) << "\n";
+                    std::cout << "Perimeter of circle: " << std::fixed << std::setprecision(10) << perimeter_circ(a) << "\n";
                     std::cout << "------------\n";
                     break;
                 case 4:
-                    std::cout << "Enter ellipse radius 1: ";
-                    std::cin >> a;
-                    std::cout << "Enter ellipse radius 2: ";
-                    std::cin >> b;
+                    if (!check_input(a, "Enter ellipse radius 1: ")) break;
+                    if (!check_input(b, "Enter ellipse radius 2: ")) break;
                     std::cout << "------------\n";
-                    std::cout << "Perimeter of ellipse: " << perimeter_eclp(a, b) << "\n";
+                    std::cout << "Perimeter of ellipse: " << std::fixed << std::setprecision(10) << perimeter_eclp(a, b) << "\n";
                     std::cout << "------------\n";
                     break;
                 default:
@@ -286,7 +309,7 @@ double Calculator::volume_sqr_prism(double a) {
 }
 
 double Calculator::volume_sphere(double a) {
-    return ((4/3) * pi * pow(a, 3));
+    return ((4.0/3.0) * pi * pow(a, 3));
 }
 double Calculator::volume_elipsoid(double a, double b, double c) {
     double out {0};
@@ -313,39 +336,31 @@ void Calculator::volume() {
         else {
             switch (in) {
                 case 1:
-                    std::cout << "Enter rectangle width: ";
-                    std::cin >> a;
-                    std::cout << "Enter rectangle length: ";
-                    std::cin >> b;
-                    std::cout << "Enter rectangle height: ";
-                    std::cin >> c;
+                    if (!check_input(a, "Enter rectangle width: ")) break;
+                    if (!check_input(b, "Enter rectangle length: ")) break;
+                    if (!check_input(c, "Enter rectangle height: ")) break;
                     std::cout << "------------\n";
-                    std::cout << "Volume of rectangle: " << volume_rec_prism(a, b, c) << "\n";
+                    std::cout << "Volume of rectangle: " << std::fixed << std::setprecision(10) << volume_rec_prism(a, b, c) << "\n";
                     std::cout << "------------\n";
                     break;
                 case 2:
-                    std::cout << "Enter square length: ";
-                    std::cin >> a;
+                    if (!check_input(a, "Enter square length: ")) break;
                     std::cout << "------------\n";
-                    std::cout << "Volume of rectangle: " << volume_sqr_prism(a) << "\n";
+                    std::cout << "Volume of square: " << std::fixed << std::setprecision(10) << volume_sqr_prism(a) << "\n";
                     std::cout << "------------\n";
                     break;
                 case 3:
-                    std::cout << "Enter circle radius: ";
-                    std::cin >> a;
+                    if (!check_input(a, "Enter sphere radius: ")) break;
                     std::cout << "------------\n";
-                    std::cout << "Volume of sphere: " << volume_sphere(a) << "\n";
+                    std::cout << "Volume of sphere: " << std::fixed << std::setprecision(10)  << volume_sphere(a) << "\n";
                     std::cout << "------------\n";
                     break;
                 case 4:
-                    std::cout << "Enter ellipse radius 1: ";
-                    std::cin >> a;
-                    std::cout << "Enter ellipse radius 2: ";
-                    std::cin >> b;
-                    std::cout << "Enter ellipse radius 3: ";
-                    std::cin >> c;
+                    if (!check_input(a, "Enter ellipse radius 1: ")) break;
+                    if (!check_input(b, "Enter ellipse radius 2: ")) break;
+                    if (!check_input(c, "Enter ellipse radius 3: ")) break;
                     std::cout << "------------\n";
-                    std::cout << "Volume of ellipse: " << volume_elipsoid(a, b, c) << "\n";
+                    std::cout << "Volume of ellipse: " << std::fixed << std::setprecision(10) << volume_elipsoid(a, b, c) << "\n";
                     std::cout << "------------\n";
                     break;
                 default:
