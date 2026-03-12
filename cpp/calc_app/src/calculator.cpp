@@ -22,11 +22,11 @@ int Calculator::choose() {
     int input = 0;
     while (true) {
         std::cout << "\nCalculator Menu:\n";
-        std::cout << "1) mathmatic\n2) Area\n3) Perimeter\n4) Volume\n5) Quite\n";
+        std::cout << "1) mathmatic\n2) Area\n3) Perimeter\n4) Volume\n5) Surface area\n6) Quit\n";
         std::cout << "Enter choice : ";
         std::cin >> input;
-        if (input>=1 && input<=5) {
-            if (input == 5) {
+        if (input>=1 && input<=6) {
+            if (input == 6) {
                 std::ifstream file("assets/ascii_close.txt");
                 if (!file.is_open()) {
                     std::cerr << "Error: ascii_intro.txt not found\n";
@@ -70,7 +70,42 @@ double Calculator::roott(double a, double b) {
     }
     return pow(b, 1.0/a);
 }
-void Calculator::mathmatic() {
+
+long int Calculator::modulo(long int a, long int b) {
+    if (a != floor(a) || b != floor(b)) {
+        std::cout << "The numbers are double datatype!\n";
+        std::cout << "Converted to integer datatype: \n";
+        long int x = (long int)a;
+        long int y = (long int)b;
+        return x % y;
+    }
+    else return (long int)a % (long int)b;
+}
+
+double Calculator::logfuc(double a, double b) {
+    if (a <= 0 || a == 1 || b <= 0) {
+        std::cout << "Invalid values for logarithm\n";
+        return -1;
+    }
+    return log(b) / log(a);
+}
+
+long int Calculator::factorial(long int a) {
+    if (a < 0) {
+        std::cout << "Factorial not defined for negative numbers\n";
+        return -1;
+    }
+    if (a == 0 || a == 1)
+        return 1;
+    return a * factorial(a - 1);
+}
+
+double Calculator::absolute(double a) {
+    if (a > 0) return a;
+    else return std::abs(a);
+}
+
+void Calculator::mathematic() {
     double a {0}, b {0};
     char op;
     int in;
@@ -86,17 +121,20 @@ void Calculator::mathmatic() {
             std::cout << "\nWrong input. Please try again.\n";
         }
         else if (in == 1) {
-            std::cout << "\nadd-> '+'\nsub-> '-'\nmult-> '*'\ndiv-> '/'\npower-> '^'\nroot-> 'V'\n\n";
-            std::cout << "Enter expression (or 'q' to quit): ";
-            std::cout << "Enter expression\n";
+            std::cout << "\nadd-> '+'\nsub-> '-'\nmult-> '*'\ndiv-> '/'\npower-> '^'\nroot-> 'V' "
+                         "\nmodule-> '%' \nlog-> 'l a b'"
+                         "\nfact-> 'f'"
+                         "\nabs-> 's'\n\n";
+            std::cout << "Enter expression (or 'q or Q' to quit): ";
             std::string expr;
             std::getline(std::cin >> std::ws, expr);
             if (expr == "q" || expr == "Q") {
                 std::cout << "Exiting calculator...\n";
                 break;
             }
-            if (sscanf(expr.c_str(), "%lf %c %lf", &a, &op, &b) != 3) {
-                std::cout << "Invalid expression. Use format: \n";
+            int count = sscanf(expr.c_str(), "%lf %c %lf", &a, &op, &b);
+            if (count < 2) {
+                std::cout << "Invalid expression.\n";
                 continue;
             }
             switch (op) {
@@ -128,6 +166,30 @@ void Calculator::mathmatic() {
                 case 'V':
                     std::cout << "-----------\n";
                     std::cout << "Result root: " <<roott(a, b) << "\n";
+                    std::cout << "-----------\n";
+                    break;
+                case '%':
+                    std::cout << "-----------\n";
+                    std::cout << "Result module: " <<modulo(a, b) << "\n";
+                    std::cout << "-----------\n";
+                    break;
+                case 'l':
+                    std::cout << "-----------\n";
+                    std::cout << "Result logarithm: " <<logfuc(a, b) << "\n";
+                    std::cout << "-----------\n";
+                    break;
+                case 'f':
+                    if (count != 2) {
+                        std::cout << "Factorial takes one number.\n";
+                        break;
+                    }
+                    std::cout << "-----------\n";
+                    std::cout << "Result factorial: " <<factorial(a) << "\n";
+                    std::cout << "-----------\n";
+                    break;
+                case 's':
+                    std::cout << "-----------\n";
+                    std::cout << "Result absolute: " <<absolute(a) << "\n";
                     std::cout << "-----------\n";
                     break;
                 default:
@@ -180,21 +242,25 @@ double Calculator::area_eclp(double a, double b) {
     return (a * b * pi);
 }
 
+double Calculator::area_triangle(double a, double b) {
+    return ((a*b) / 2);
+}
+
 void Calculator::area() {
     double a {0}, b {0};
     int in {0};
     while (true) {
         std::cout << "\nChoose: \n" << "1) Rectangle\n" <<  "2) Square\n"
-        <<  "3) Circle\n" <<  "4) Ellipse\n" <<  "5) Return\n";
+        <<  "3) Circle\n" <<  "4) Ellipse\n" << "5) Triangle\n" <<  "6) Return\n";
         std::cout << "Enter choice : ";
         std::cin >> in;
-        if (in == 5) {
+        if (in == 6) {
             std::cout << "----------------------------------\n";
             std::cout << "Thanks for using area calculator!\n";
             std::cout << "----------------------------------\n";
             break;
         }
-        else if (in < 1 || in > 5) {
+        else if (in < 1 || in > 6) {
             std::cout << "\nWrong input. Please try again.\n";
         }
         else {
@@ -217,7 +283,7 @@ void Calculator::area() {
                     std::cout << "\n------------\n";
                     break;
                 case 3:
-                    if (!check_input(a, "Enter cicle radius: ")) break;
+                    if (!check_input(a, "Enter circle radius: ")) break;
                     std::cout << "------------\n";
                     std::cout << "Area of circle: " << std::fixed << std::setprecision(10) << area_circ(a) << "\n";
                     std::cout << "------------\n";
@@ -227,6 +293,13 @@ void Calculator::area() {
                     if (!check_input(b, "Enter ellipse radius 2: ")) break;
                     std::cout << "------------\n";
                     std::cout << "Area of ellipse: " << std::fixed << std::setprecision(10) << area_eclp(a, b) << "\n";
+                    std::cout << "------------\n";
+                    break;
+                case 5:
+                    if (!check_input(a, "Enter triangle length: ")) break;
+                    if (!check_input(b, "Enter triangle height: ")) break;
+                    std::cout << "------------\n";
+                    std::cout << "Area of triangle: " << std::fixed << std::setprecision(10) << area_triangle(a, b) << "\n";
                     std::cout << "------------\n";
                     break;
                 default:
@@ -249,21 +322,24 @@ double Calculator::perimeter_eclp(double a, double b) {
     double c {0};
     return c = 2 * pi * sqrt((a * a + b * b) / (2 * 1.0));
 }
+double Calculator::perimeter_triangle(double a, double b, double c) {
+    return (a + b + c);
+}
 void Calculator::perimeter() {
-    double a {0}, b {0};
+    double a {0}, b {0}, c {0};
     int in {0};
     while (true) {
         std::cout << "\nChoose: \n" << "1) Rectangle\n" <<  "2) Square\n"
-        <<  "3) Circle\n" <<  "4) Ellipse\n" <<  "5) Return\n";
+        <<  "3) Circle\n" <<  "4) Ellipse\n" << "5) Triangle\n"<<  "6) Return\n";
         std::cout << "Enter choice : ";
         std::cin >> in;
-        if (in == 5) {
+        if (in == 6) {
             std::cout << "----------------------------------\n";
             std::cout << "Thanks for using perimeter calculator!\n";
             std::cout << "----------------------------------\n";
             break;
         }
-        else if (in < 1 || in > 5) {
+        else if (in < 1 || in > 6) {
             std::cout << "\nWrong input. Please try again.\n";
         }
         else {
@@ -294,6 +370,14 @@ void Calculator::perimeter() {
                     std::cout << "Perimeter of ellipse: " << std::fixed << std::setprecision(10) << perimeter_eclp(a, b) << "\n";
                     std::cout << "------------\n";
                     break;
+                case 5:
+                    if (!check_input(a, "Enter triangle a: ")) break;
+                    if (!check_input(b, "Enter triangle b: ")) break;
+                    if (!check_input(c, "Enter triangle c: ")) break;
+                    std::cout << "------------\n";
+                    std::cout << "Perimeter of triangle: " << std::fixed << std::setprecision(10) << perimeter_triangle(a, b,c) << "\n";
+                    std::cout << "------------\n";
+                    break;
                 default:
                     std::cout << "Invalid choice.\n";
             }
@@ -315,22 +399,30 @@ double Calculator::volume_elipsoid(double a, double b, double c) {
     double out {0};
     return out = (1.33 * pi * a * b * c);
 }
-
+double Calculator::volume_triangle(double a, double b, double c) {
+    return ((a * b * c) / 2.0);
+}
+double Calculator::volume_cylinder(double a, double b) {
+    return (pi * a * a * b);
+}
+double Calculator::volume_cone(double a, double b) {
+    return (pi * a * a * (b/3));
+}
 void Calculator::volume() {
     double a {0}, b {0}, c {0};
     int in {0};
     while (true) {
         std::cout << "\nChoose: \n" << "1) Rectangle\n" <<  "2) Square\n" << "3) Shpere\n" <<
-            "4) Ellipsoid\n" <<  "5) Return\n";
+            "4) Ellipsoid\n" << "5) Pyramid\n" << "6) Cylinder\n" << "7) Cone\n" <<  "8) Return\n";
         std::cout << "Enter choice : ";
         std::cin >> in;
-        if (in == 5) {
+        if (in == 8) {
             std::cout << "----------------------------------\n";
             std::cout << "Thanks for using Volume calculator!\n";
             std::cout << "----------------------------------\n";
             break;
         }
-        else if (in < 1 || in > 5) {
+        else if (in < 1 || in > 8) {
             std::cout << "\nWrong input. Please try again.\n";
         }
         else {
@@ -360,7 +452,87 @@ void Calculator::volume() {
                     if (!check_input(b, "Enter ellipse radius 2: ")) break;
                     if (!check_input(c, "Enter ellipse radius 3: ")) break;
                     std::cout << "------------\n";
-                    std::cout << "Volume of ellipse: " << std::fixed << std::setprecision(10) << volume_elipsoid(a, b, c) << "\n";
+                    std::cout << "Volume of elipsoide: " << std::fixed << std::setprecision(10) << volume_elipsoid(a, b, c) << "\n";
+                    std::cout << "------------\n";
+                    break;
+                case 5:
+                    if (!check_input(a, "Enter triangle height: ")) break;
+                    if (!check_input(b, "Enter triangle width: ")) break;
+                    if (!check_input(c, "Enter triangle height: ")) break;
+                    std::cout << "------------\n";
+                    std::cout << "Volume of pyramid: " << std::fixed << std::setprecision(10) << volume_triangle(a, b, c) << "\n";
+                    std::cout << "------------\n";
+                    break;
+                case 6:
+                    if (!check_input(a, "Enter cylinder radius: ")) break;
+                    if (!check_input(b, "Enter cylinder height: ")) break;
+                    std::cout << "------------\n";
+                    std::cout << "Volume of cylinder: " << std::fixed << std::setprecision(10) << volume_cylinder(a, b) << "\n";
+                    std::cout << "------------\n";
+                    break;
+                case 7:
+                    if (!check_input(a, "Enter cone radius: ")) break;
+                    if (!check_input(b, "Enter cone height: ")) break;
+                    std::cout << "------------\n";
+                    std::cout << "Volume of cone: " << std::fixed << std::setprecision(10) << volume_cone(a, b) << "\n";
+                    std::cout << "------------\n";
+                    break;
+                default:
+                    std::cout << "Invalid choice.\n";
+            }
+        }
+    }
+}
+double Calculator::cylinder_surface_area(double a, double b) {
+    return ((2 * pi * a * b) + (2 * pi * a * a));
+}
+
+double Calculator::cone_surface_area(double a, double b) {
+    return ((pi * a) * (a + sqrt(a*a+b*b)));
+}
+
+double Calculator::pyramid_surface_area(double a, double b) {
+    return 2 * pi * sqrt((a*a + b*b)/2);
+}
+
+void Calculator::surface_area() {
+    double a {0}, b {0}, c {0};
+    int in {0};
+    while (true) {
+        std::cout << "\nChoose: \n" << "1) Cylinder\n" <<  "2) Cone\n" << "3) Pyramid\n"
+            "4) Return\n";
+        std::cout << "Enter choice : ";
+        std::cin >> in;
+        if (in == 4) {
+            std::cout << "----------------------------------\n";
+            std::cout << "Thanks for using Volume calculator!\n";
+            std::cout << "----------------------------------\n";
+            break;
+        }
+        else if (in < 1 || in > 4) {
+            std::cout << "\nWrong input. Please try again.\n";
+        }
+        else {
+            switch (in) {
+                case 1:
+                    if (!check_input(a, "Enter cylinder radius: ")) break;
+                    if (!check_input(b, "Enter cylinder height: ")) break;
+                    std::cout << "------------\n";
+                    std::cout << "Surface area of cylinder: " << std::fixed << std::setprecision(10) << cylinder_surface_area(a, b) << "\n";
+                    std::cout << "------------\n";
+                    break;
+                case 2:
+                    if (!check_input(a, "Enter cone radius: ")) break;
+                    if (!check_input(b, "Enter cone height: ")) break;
+                    std::cout << "------------\n";
+                    std::cout << "Surface area of cone: " << std::fixed << std::setprecision(10) << cone_surface_area(a, b) << "\n";
+                    std::cout << "------------\n";
+                    break;
+                case 3:
+                    if (!check_input(a, "Enter pyramid length: ")) break;
+                    if (!check_input(b  , "Enter pyramid height: ")) break;
+                    std::cout << "------------\n";
+                    std::cout << "Surface area of pyramid: " << std::fixed << std::setprecision(10)  << pyramid_surface_area(a , b) << "\n";
                     std::cout << "------------\n";
                     break;
                 default:
@@ -372,12 +544,12 @@ void Calculator::volume() {
 void Calculator::calculator() {
     while (true) {
         int choice = choose();
-        if (choice == 5) {
+        if (choice == 6) {
             break;
         }
         switch (choice) {
             case 1:
-                mathmatic();
+                mathematic();
                 break;
             case 2:
                 area();
@@ -387,6 +559,9 @@ void Calculator::calculator() {
                 break;
             case 4:
                 volume();
+                break;
+            case 5:
+                surface_area();
                 break;
             default:
                 std::cout << "Invalid choice.\n";
