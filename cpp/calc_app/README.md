@@ -22,9 +22,11 @@ calc_app/
 ├── build.sh              # Script to build the project
 ├── run.sh                # Script to run the executable
 ├── include/              # Header files
-│   └── calculator.h
+│   ├── calculator.h
+│   └── draw_shapes.h     # NEW: drawing functions declarations
 ├── src/                  # Implementation files
 │   ├── calculator.cpp
+│   ├── draw_shapes.cpp   # NEW: drawing implementations
 │   └── main.cpp
 ├── assets/               # ASCII art and other resources
 │   ├── ascii_intro.txt
