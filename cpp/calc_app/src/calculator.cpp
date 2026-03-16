@@ -22,11 +22,11 @@ int Calculator::choose() {
     int input = 0;
     while (true) {
         std::cout << "\nCalculator Menu:\n";
-        std::cout << "1) mathmatic\n2) Area\n3) Perimeter\n4) Volume\n5) Surface area\n6) Quit\n";
+        std::cout << "1) mathmatic\n2) Area\n3) Perimeter\n4) Volume\n5) Surface area\n6) Trig function\n7) Unit convertor\n8) Quit\n";
         std::cout << "Enter choice : ";
         std::cin >> input;
-        if (input>=1 && input<=6) {
-            if (input == 6) {
+        if (input>=1 && input<=8) {
+            if (input == 8) {
                 std::ifstream file("assets/ascii_close.txt");
                 if (!file.is_open()) {
                     std::cerr << "Error: ascii_intro.txt not found\n";
@@ -396,8 +396,7 @@ double Calculator::volume_sphere(double a) {
     return ((4.0/3.0) * pi * pow(a, 3));
 }
 double Calculator::volume_elipsoid(double a, double b, double c) {
-    double out {0};
-    return out = (1.33 * pi * a * b * c);
+    return (4.0/3.0) * pi * a * b * c;
 }
 double Calculator::volume_triangle(double a, double b, double c) {
     return ((a * b * c) / 2.0);
@@ -456,9 +455,9 @@ void Calculator::volume() {
                     std::cout << "------------\n";
                     break;
                 case 5:
-                    if (!check_input(a, "Enter triangle height: ")) break;
-                    if (!check_input(b, "Enter triangle width: ")) break;
-                    if (!check_input(c, "Enter triangle height: ")) break;
+                    if (!check_input(a, "Enter pyramid base width: ")) break;
+                    if (!check_input(b, "Enter pyramid base length: ")) break;
+                    if (!check_input(c, "Enter pyramid height: ")) break;
                     std::cout << "------------\n";
                     std::cout << "Volume of pyramid: " << std::fixed << std::setprecision(10) << volume_triangle(a, b, c) << "\n";
                     std::cout << "------------\n";
@@ -505,7 +504,7 @@ void Calculator::surface_area() {
         std::cin >> in;
         if (in == 4) {
             std::cout << "----------------------------------\n";
-            std::cout << "Thanks for using Volume calculator!\n";
+            std::cout << "Thanks for using Surface calculator!\n";
             std::cout << "----------------------------------\n";
             break;
         }
@@ -541,10 +540,171 @@ void Calculator::surface_area() {
         }
     }
 }
+
+double Calculator::sin_func(double a) {
+    double radian = a * pi / 180.0;
+    return sin(radian);
+}
+double Calculator::cos_func(double a) {
+    double radian = a * pi / 180.0;
+    return cos(radian);
+}
+double Calculator::tan_func(double a) {
+    if (fmod(a, 180.0) == 90.0) {
+        std::cout << "Tan(90) is undefined!\n";
+        return 0;
+    }
+    double radian = a * pi / 180.0;
+    return tan(radian);
+}
+
+void Calculator::trig_func() {
+    double a {0};
+    int in {0};
+    while (true) {
+        std::cout << "\nChoose: \n" << "1) Sin\n" <<  "2) Cos\n" << "3) Tan\n"
+            "4) Return\n";
+        std::cout << "Enter choice : ";
+        std::cin >> in;
+        if (in == 4) {
+            std::cout << "----------------------------------\n";
+            std::cout << "Thanks for using Trig calculator!\n";
+            std::cout << "----------------------------------\n";
+            break;
+        }
+        else if (in < 1 || in > 4) {
+            std::cout << "\nWrong input. Please try again.\n";
+        }
+        else {
+            switch (in) {
+                case 1:
+                    if (!check_input(a, "Enter sin angle: °")) break;
+                    std::cout << "------------\n";
+                    std::cout << "Sin result: " << std::fixed << std::setprecision(10) << sin_func(a) << "\n";
+                    std::cout << "------------\n";
+                    break;
+                case 2:
+                    if (!check_input(a, "Enter cos angle: °")) break;
+                    std::cout << "------------\n";
+                    std::cout << "Cos result: " << std::fixed << std::setprecision(10) << cos_func(a) << "\n";
+                    std::cout << "------------\n";
+                    break;
+                case 3:
+                    if (!check_input(a, "Enter angle: °")) break;
+                    std::cout << "------------\n";
+                    std::cout << "Tan result: " << std::fixed << std::setprecision(10)  << tan_func(a) << "\n";
+                    std::cout << "------------\n";
+                    break;
+                default:
+                    std::cout << "Invalid choice.\n";
+            }
+        }
+    }
+}
+double Calculator::celsius_to_fahrenheit(double a) {
+    double  converted = (a * celToFahMult) + fahOffset;
+    return converted;
+}
+double Calculator::fahrenheit_to_celsius(double a) {
+    double converted = (a - fahOffset) * fahToCelMult;
+    return converted;
+}
+bool Calculator::check_input_temp(double &x, const std::string &prompt) {
+    std::string line;
+    while (true) {
+        std::cout << prompt;
+        std::getline(std::cin >> std::ws, line);
+        if (line == "q" || line == "Q") {
+            x = -1;
+            return false;
+        }
+        std::stringstream ss(line);
+        if (!(ss >> x)) {
+            std::cout << "Invalid input. Please enter a number.\n";
+            continue;
+        }
+        if (!(ss >> std::ws).eof()) {
+            std::cout << "Invalid input. Extra characters after number.\n";
+            continue;
+        }
+        return true;
+    }
+}
+void Calculator::temperature_converter() {
+    double a {0};
+    int in {0};
+    while (true) {
+        std::cout << "\nChoose: \n" << "1) Celsius to Fahrenheit\n" <<  "2) Fahrenheit to Celsius\n" <<
+            "3) Return\n";
+        std::cout << "Enter choice : ";
+        std::cin >> in;
+        if (in == 3) {
+            std::cout << "----------------------------------\n";
+            std::cout << "Thanks for using Temperature Converter calculator!\n";
+            std::cout << "----------------------------------\n";
+            break;
+        }
+        else if (in < 1 || in > 3) {
+            std::cout << "\nWrong input. Please try again.\n";
+        }
+        else {
+            switch (in) {
+                case 1:
+                    if (!check_input_temp(a, "Enter Celsius to Fahrenheit: °")) break;
+                    std::cout << "------------\n";
+                    std::cout << "Fahrenheit result: " << std::fixed << std::setprecision(3)  << celsius_to_fahrenheit(a) << "\n";
+                    std::cout << "------------\n";
+                    break;
+                case 2:
+                    if (!check_input_temp(a, "Enter Fahrenheit to Celsius: °")) break;
+                    std::cout << "------------\n";
+                    std::cout << "Celsius result: " << std::fixed << std::setprecision(3)  << fahrenheit_to_celsius(a) << "\n";
+                    std::cout << "------------\n";
+                    break;
+                default:
+                    std::cout << "Invalid choice.\n";
+            }
+        }
+    }
+}
+
+void Calculator::convert_unit() {
+    int in {0};
+    while (true) {
+        std::cout << "\nChoose: \n" << "1) Temperature Converter\n" <<  "2) Length\n" << "3) Weight\n"
+            "4) Return\n";
+        std::cout << "Enter choice : ";
+        std::cin >> in;
+        if (in == 4) {
+            std::cout << "----------------------------------\n";
+            std::cout << "Thanks for using Converter calculator!\n";
+            std::cout << "----------------------------------\n";
+            break;
+        }
+        else if (in < 1 || in > 4) {
+            std::cout << "\nWrong input. Please try again.\n";
+        }
+        else {
+            switch (in) {
+                case 1:
+                    temperature_converter();
+                    break;
+                case 2:
+
+                    break;
+                case 3:
+
+                    break;
+                default:
+                    std::cout << "Invalid choice.\n";
+            }
+        }
+    }
+}
 void Calculator::calculator() {
     while (true) {
         int choice = choose();
-        if (choice == 6) {
+        if (choice == 8) {
             break;
         }
         switch (choice) {
@@ -562,6 +722,12 @@ void Calculator::calculator() {
                 break;
             case 5:
                 surface_area();
+                break;
+            case 6:
+                trig_func();
+                break;
+            case 7:
+                convert_unit();
                 break;
             default:
                 std::cout << "Invalid choice.\n";

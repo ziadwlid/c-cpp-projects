@@ -6,6 +6,9 @@ class Calculator {
         int number = 0;
         int sum = 0;
         double pi = 3.14159265358979323846;
+        const double celToFahMult = 9.0 / 5.0;
+        const double fahToCelMult = 5.0 / 9.0;
+        const int fahOffset = 32;
     public:
         void run ();
         void intro();
@@ -46,6 +49,15 @@ class Calculator {
         double cylinder_surface_area(double a, double b);
         double cone_surface_area(double a, double b);
         double pyramid_surface_area(double a, double b);
+        void trig_func ();
+        double sin_func (double a);
+        double cos_func (double a);
+        double tan_func (double a);
+        void convert_unit();
+        void temperature_converter ();
+        bool check_input_temp (double &x, const std::string &prompt);
+        double celsius_to_fahrenheit (double a);
+        double fahrenheit_to_celsius (double a);
         bool check_input(double &x, const std::string &prompt);
 };
 #endif
