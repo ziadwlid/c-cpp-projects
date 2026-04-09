@@ -1,6 +1,7 @@
 #ifndef CALCULATOR_H
 #define CALCULATOR_H
 #include <string>
+#include <vector>
 class Calculator {
     private:
         int number = 0;
@@ -9,6 +10,7 @@ class Calculator {
         const double celToFahMult = 9.0 / 5.0;
         const double fahToCelMult = 5.0 / 9.0;
         const int fahOffset = 32;
+        std::vector<std::string> history;
     public:
         void run ();
         void intro();
@@ -59,5 +61,7 @@ class Calculator {
         double celsius_to_fahrenheit (double a);
         double fahrenheit_to_celsius (double a);
         bool check_input(double &x, const std::string &prompt);
+        void add_history(const std::string &entry);
+        void show_history();
 };
 #endif

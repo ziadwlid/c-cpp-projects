@@ -22,11 +22,15 @@ int Calculator::choose() {
     int input = 0;
     while (true) {
         std::cout << "\nCalculator Menu:\n";
-        std::cout << "1) mathmatic\n2) Area\n3) Perimeter\n4) Volume\n5) Surface area\n6) Trig function\n7) Unit convertor\n8) Quit\n";
+        std::cout << "1) mathmatic\n"
+                     "2) Area\n3) Perimeter\n4) Volume\n5) Surface area\n"
+                     "6) Trig function\n7) Unit convertor\n"
+                     "8) History\n"
+                     "9) Quit\n";
         std::cout << "Enter choice : ";
         std::cin >> input;
-        if (input>=1 && input<=8) {
-            if (input == 8) {
+        if (input>=1 && input<=9) {
+            if (input == 9) {
                 std::ifstream file("assets/ascii_close.txt");
                 if (!file.is_open()) {
                     std::cerr << "Error: ascii_intro.txt not found\n";
@@ -141,41 +145,49 @@ void Calculator::mathematic() {
                 case '+':
                     std::cout << "-----------\n";
                     std::cout << "Result add: " << add(a, b) << "\n";
+                    add_history(std::to_string(a) + " + " + std::to_string(b) + " = " + std::to_string(add(a, b)));
                     std::cout << "-----------\n";
                     break;
                 case '-':
                     std::cout << "-----------\n";
                     std::cout << "Result sub: " <<sub(a,b) << "\n";
+                    add_history(std::to_string(a) + " - " + std::to_string(b) + " = " + std::to_string(sub(a, b)));
                     std::cout << "-----------\n";
                     break;
                 case '*':
                     std::cout << "-----------\n";
                     std::cout << "Result mul: " <<mul(a,b) << "\n";
+                    add_history(std::to_string(a) + " * " + std::to_string(b) + " = " + std::to_string(mul(a, b)));
                     std::cout << "-----------\n";
                     break;
                 case '/':
                     std::cout << "-----------\n";
                     std::cout << "Result div: " << div(a,b) << "\n";
+                    add_history(std::to_string(a) + " / " + std::to_string(b) + " = " + std::to_string(div(a, b)));
                     std::cout << "-----------\n";
                     break;
                 case '^':
                     std::cout << "-----------\n";
-                    std::cout << "Result root: " << std::fixed << std::setprecision(20) << powr(a,b) << "\n";
+                    std::cout << "Result power: " << std::fixed << std::setprecision(20) << powr(a,b) << "\n";
+                    add_history(std::to_string(a) + " pow " + std::to_string(b) + " = " + std::to_string(powr(a, b)));
                     std::cout << "-----------\n";
                     break;
                 case 'V':
                     std::cout << "-----------\n";
                     std::cout << "Result root: " <<roott(a, b) << "\n";
+                    add_history(std::to_string(a) + " root " + std::to_string(b) + " = " + std::to_string(roott(a, b)));
                     std::cout << "-----------\n";
                     break;
                 case '%':
                     std::cout << "-----------\n";
                     std::cout << "Result module: " <<modulo(a, b) << "\n";
+                    add_history(std::to_string(a) + " modulu " + std::to_string(b) + " = " + std::to_string(modulo(a, b)));
                     std::cout << "-----------\n";
                     break;
                 case 'l':
                     std::cout << "-----------\n";
                     std::cout << "Result logarithm: " <<logfuc(a, b) << "\n";
+                    add_history(std::to_string(a) + " log " + std::to_string(b) + " = " + std::to_string(logfuc(a, b)));
                     std::cout << "-----------\n";
                     break;
                 case 'f':
@@ -185,11 +197,13 @@ void Calculator::mathematic() {
                     }
                     std::cout << "-----------\n";
                     std::cout << "Result factorial: " <<factorial(a) << "\n";
+                    add_history(std::to_string(a) + " factorial = " + std::to_string(factorial(a)));
                     std::cout << "-----------\n";
                     break;
                 case 's':
                     std::cout << "-----------\n";
                     std::cout << "Result absolute: " <<absolute(a) << "\n";
+                    add_history(std::to_string(a) + " absolute = " + std::to_string(absolute(a)));
                     std::cout << "-----------\n";
                     break;
                 default:
@@ -701,10 +715,30 @@ void Calculator::convert_unit() {
         }
     }
 }
+void Calculator::add_history(const std::string &entry) {
+    if (history.size() >= 10) {
+        history.erase(history.begin()); // remove oldest if full
+    }
+    history.push_back(entry);
+}
+
+void Calculator::show_history() {
+    if (history.empty()) {
+        std::cout << "\n------------------\n";
+        std::cout << "No history yet.\n";
+        std::cout << "------------------\n";
+        return;
+    }
+    std::cout << "\n--- Last " << history.size() << " results ---\n";
+    for (int i = 0; i < history.size(); i++) {
+        std::cout << i + 1 << ") " << history[i] << "\n";
+    }
+    std::cout << "-------------------\n";
+}
 void Calculator::calculator() {
     while (true) {
         int choice = choose();
-        if (choice == 8) {
+        if (choice == 9) {
             break;
         }
         switch (choice) {
@@ -728,6 +762,9 @@ void Calculator::calculator() {
                 break;
             case 7:
                 convert_unit();
+                break;
+            case 8:
+                show_history();
                 break;
             default:
                 std::cout << "Invalid choice.\n";
